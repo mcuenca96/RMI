@@ -4,9 +4,9 @@ public class Content
     private String title;
     private String topic;
     private byte[] file;
-    private String id;
+    private int id;
 
-    public Content(byte[] file, String title, String topic, String id){
+    public Content(byte[] file, String title, String topic, int id){
 
         this.file = file;
         this.title = title;
@@ -30,7 +30,7 @@ public class Content
         return this.file;
     }
 
-    public String getId(){
+    public int getId(){
 
         return this.id;
     }

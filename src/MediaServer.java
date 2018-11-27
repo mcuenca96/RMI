@@ -19,7 +19,6 @@ public class MediaServer {
             // code for port number value to be supplied
 
             System.out.println("SERVER READY");
-            PrintWriter writer = new PrintWriter("ContentFile.txt", "UTF-8");
 
             MediaImpl exportedObj = new MediaImpl();
             startRegistry(RMIPortNum);
@@ -29,18 +28,12 @@ public class MediaServer {
 
             mediaKey = exportedObj.hashCode();
 
-            writer.println("File: " + mediaKey);
-            writer.close();
+            exportedObj.identifier = mediaKey;
+
 
 
         }// end try
 
-        catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-        }
         catch (RemoteException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {

@@ -1,31 +1,28 @@
 import java.rmi.*;
 import java.rmi.server.*;
 
+
 public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
     public MediaImpl() throws RemoteException {
         super();
 
     }
 
+    public int identifier;
+
 
     public void upload(byte[] fileContent, String title, String topic) {
 
-
-        String identifier = idGen();
+        RandomStringGenerator rnd = new RandomStringGenerator();
+        //String identifier = rnd.generateString();
         Content myContent = new Content(fileContent, title, topic, identifier);
 
         MyStorage store = new MyStorage(myContent);
         store.saveContent();
+        store.saveTitle();
+        store.saveTopics();
     }
 
-    public String idGen()
-    {
-        String id = RandomString.digits + "ACEFGHJKLMNPQRUVWXYabcdefhijkprstuvwx";
-
-
-        return id;
-
-    }
 
 
    /* public String[] getContent(String topic) {
