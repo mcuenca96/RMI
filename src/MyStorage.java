@@ -1,19 +1,19 @@
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.*;
 
-public class MyStorage {
+
+
+public class MyStorage  {
 
     private byte[] file;
     private String title;
     private String topic;
     private int id;
+    private String type;
 
     private String topicPath = "/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORAGE/Topics/";
     private String titlesPath = "/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORAGE/Titles/";
+    private String filesPath = "/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORAGE/Files/";
+    private String typePath = "/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORE/";
 
 
 
@@ -26,23 +26,25 @@ public class MyStorage {
 
     }
 
+    public MyStorage(String type)
+    {
+        this.type = type;
+    }
+
     public void saveContent() {
-        OutputStream os = null;
 
-        try
-        {
-
-            os = new BufferedOutputStream(new FileOutputStream("/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORAGE/Files/" + id));
-            os.write(file);
-            os.close();
-            System.out.println("Content stored correctly!");
+        try (FileOutputStream fos = new FileOutputStream(filesPath + id)) {
+            fos.write(file);
+            //fos.close(); There is no more need for this line since you had created the instance of "fos" inside the try. And this will automatically close the OutputStream
         }
-        catch (IOException e)
-        {
+
+        catch (IOException e){
+
             e.printStackTrace();
         }
 
     }
+
 
     public void saveTitle() {
 
@@ -77,6 +79,13 @@ public class MyStorage {
 
             e.printStackTrace();
         }
+    }
+
+    public String[] load()
+    {
+
+        String[] contents = {"X"};
+        return contents;
     }
 
     }

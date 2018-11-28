@@ -13,11 +13,10 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
 
     public void upload(byte[] fileContent, String title, String topic) {
 
-        RandomStringGenerator rnd = new RandomStringGenerator();
-        //String identifier = rnd.generateString();
-        Content myContent = new Content(fileContent, title, topic, identifier);
 
+        Content myContent = new Content(fileContent, title, topic, identifier);
         MyStorage store = new MyStorage(myContent);
+
         store.saveContent();
         store.saveTitle();
         store.saveTopics();
@@ -25,15 +24,18 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
 
 
 
-   /* public String[] getContent(String topic) {
+   public String[] getContent(String param, String type) {
 
-        //TODO
+        MyStorage load = new MyStorage(param);
+        return load.load();
+
     }
 
-    public Byte[] download(String title) {
+/*    public Byte[] download(String title) {
 
         //TODO
 
-    } */
+    }
+    */
 }
 

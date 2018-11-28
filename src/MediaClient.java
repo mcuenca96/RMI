@@ -12,15 +12,15 @@ public class MediaClient {
     }
 
     private static int portNum = 7777;
+    String URL = "rmi://localhost:" + portNum + "/some";
+    MediaInterface ourMedia;
 
 
-    public void upload(byte[] fileContent, String title, String topic) throws RemoteException {
+    public void rmiConnection() {
 
         try {
 
-            String URL = "rmi://localhost:" + portNum + "/some";
-            MediaInterface ourMedia = (MediaInterface) Naming.lookup(URL);
-            ourMedia.upload(fileContent, title, topic);
+            ourMedia = (MediaInterface) Naming.lookup(URL);
 
 
         } catch (IOException e) {
@@ -32,14 +32,23 @@ public class MediaClient {
             System.out.println("Exception in SomeClient: " + var5);
 
         }
+    }
+
+    public void upload(byte[] fileContent, String title, String topic) throws RemoteException {
+
+        rmiConnection();
+        ourMedia.upload(fileContent, title, topic);
 
     }
 
-    public String[] searchContent (String param){
+    public String[] searchContent (String param, String type) throws RemoteException{
 
-        String[] results = {"x"};
+        rmiConnection();
+        return ourMedia.getContent(param, type);
 
-        return results;
+
     }
+
+
 
 }
