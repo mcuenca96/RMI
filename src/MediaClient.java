@@ -5,6 +5,7 @@ import java.rmi.Naming;
 import java.io.File;
 import java.nio.file.Files;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 
 public class MediaClient {
@@ -41,7 +42,7 @@ public class MediaClient {
 
     }
 
-    public String[] searchContent (String param, String type) throws RemoteException{
+    public ArrayList<String> searchContent (String param, String type) throws RemoteException{
 
         rmiConnection();
         return ourMedia.getContent(param, type);

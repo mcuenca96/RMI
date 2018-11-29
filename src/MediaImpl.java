@@ -1,5 +1,6 @@
 import java.rmi.*;
 import java.rmi.server.*;
+import java.util.ArrayList;
 
 
 public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
@@ -24,9 +25,11 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
 
 
 
-   public String[] getContent(String param, String type) {
+   public ArrayList<String> getContent(String param, String type) {
 
-        MyStorage load = new MyStorage(param);
+        MyStorage load = new MyStorage(param, type);
+
+        if (load.load().size() == 0){ System.out.println("No topics found");}
         return load.load();
 
     }

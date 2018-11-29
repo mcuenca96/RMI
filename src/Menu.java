@@ -1,8 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.awt.FileDialog;
-import java.awt.Frame;
+import javax.swing.JFileChooser;
+import java.util.ArrayList;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 
 
 public class Menu {
@@ -21,7 +23,7 @@ public class Menu {
         BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
         s = bufferRead.readLine();
 
-        String[] theContent;
+        ArrayList<String> theContent;
         MediaClient cl = new MediaClient();
 
         if( s == null)
@@ -33,18 +35,27 @@ public class Menu {
         else if( s.equals("1"))
         {
 
-            FileDialog dialog = new FileDialog((Frame)null, "Select File to Open");
-            dialog.setMode(FileDialog.LOAD);
-            dialog.setVisible(true);
-            String file = dialog.getFile();
-            if (file == null) System.exit(0);
-            System.out.println(file + " chosen.");
+            JFileChooser chooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "JPG & GIF Images & PNG", "jpg", "gif","png");
+            chooser.setFileFilter(filter);
+            int returnVal = chooser.showOpenDialog(null);
+            if(returnVal == JFileChooser.APPROVE_OPTION) {
+                System.out.println("You chose to open this file: " +
+                        chooser.getSelectedFile().getName());
+            }
 
-            String title = file;
+            File file = chooser.getSelectedFile();
+
+
+            if (file == null) System.exit(0);
+
+
+            String title = chooser.getSelectedFile().getName();
             System.out.print("What's the topic?\n");
             String topic = bufferRead.readLine();
 
-            byte[] fileContent = new byte[file.length()];
+            byte[] fileContent = new byte[(int)file.length()];
             cl.upload(fileContent, title, topic);
             System.exit(0);
         }
@@ -75,7 +86,7 @@ public class Menu {
                 String param = bufferRead.readLine();
                 theContent = cl.searchContent(param, type);
 
-                System.out.print(theContent);
+
 
             }
         }
