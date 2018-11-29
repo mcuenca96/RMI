@@ -82,19 +82,21 @@ public class MyStorage {
     }
 
     public ArrayList<String> load() {
-        ArrayList<Integer> identifiers = new ArrayList<Integer>();
+        ArrayList<String> identifiers = new ArrayList<String>();
         ArrayList<String> titles = new ArrayList<String>();
 
         try {
 
             Scanner txtscan = new Scanner(new File(topicPath));
 
+            int point;
+
             while (txtscan.hasNextLine()) {
                 String str = txtscan.nextLine();
                 if (str.indexOf(param) != -1) {
 
-                    System.out.println("HELOUDA");
-                    //identifiers.add(str.substring());
+                    point = str.indexOf(":");
+                    identifiers.add(str.substring(point + 1, str.length() - 1));
 
                 }
             }
@@ -107,12 +109,12 @@ public class MyStorage {
 
                     if (str.indexOf(identifiers.get(i)) != -1) {
 
-                        titles.add(txtscan.next());
+                        point = str.indexOf(":");
+                        titles.add(str.substring(point + 1));
                     }
                 }
             }
 
-            System.out.println(titles);
 
         } catch (IOException e) {
 

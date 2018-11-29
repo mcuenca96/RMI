@@ -5,6 +5,7 @@ import javax.swing.JFileChooser;
 import java.util.ArrayList;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.nio.file.Files;
 
 
 public class Menu {
@@ -37,7 +38,7 @@ public class Menu {
 
             JFileChooser chooser = new JFileChooser();
             FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                    "JPG & GIF Images & PNG", "jpg", "gif","png");
+                    "JPG & GIF Images & PNG & MP3", "jpg", "gif","png","mp3");
             chooser.setFileFilter(filter);
             int returnVal = chooser.showOpenDialog(null);
             if(returnVal == JFileChooser.APPROVE_OPTION) {
@@ -55,7 +56,7 @@ public class Menu {
             System.out.print("What's the topic?\n");
             String topic = bufferRead.readLine();
 
-            byte[] fileContent = new byte[(int)file.length()];
+            byte[] fileContent = Files.readAllBytes(file.toPath());
             cl.upload(fileContent, title, topic);
             System.exit(0);
         }
@@ -64,31 +65,14 @@ public class Menu {
         {
             System.out.println("Search content\n");
 
-            System.out.println("a)Search by title\n");
-            System.out.println("b)Search by topic\n");
 
-            String resp = bufferRead.readLine();
+            String type = "Topics";
+            System.out.println("What's the topic?\n");
+            String param = bufferRead.readLine();
+            theContent = cl.searchContent(param, type);
 
-            if( resp.equals("a"))
-            {
-                String type = "Titles";
-                System.out.println("What's the title?\n");
-                String param = bufferRead.readLine();
-                theContent = cl.searchContent(param, type);
+            System.out.print(theContent);
 
-                System.out.print(theContent);
-            }
-
-            else if (resp.equals("b"))
-            {
-                String type = "Topics";
-                System.out.println("What's the topic?\n");
-                String param = bufferRead.readLine();
-                theContent = cl.searchContent(param, type);
-
-
-
-            }
         }
 
         else if( s.equals("3"))
