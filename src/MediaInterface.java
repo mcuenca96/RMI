@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public interface MediaInterface extends Remote {
 
 
-    void upload(byte[] fileContent, String title, String topic) throws RemoteException;
-
-    //Byte[] download(String title) throws RemoteException;
-    ArrayList<String> getContent(String param, String type) throws RemoteException;
-    //void deleteContent(String title);
+    void upload(byte[] fileContent, String title, String topic, String client) throws RemoteException;
+    byte[] download(String title) throws RemoteException;
+    ArrayList<String> getContent(String param) throws RemoteException;
+    void delete(String title, String client) throws RemoteException;
+    void modify(String original, String newTitle, String client) throws RemoteException;
 
 
 

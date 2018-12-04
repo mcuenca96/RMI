@@ -13,16 +13,22 @@ public class Menu {
 
     public static void main(String[] args)  throws IOException {
 
-        System.out.println("Welcome, what do you want to do?\n");
+        System.out.println("Welcome, what's your name?\n");
+
+        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+        String name = null;
+        name = bufferRead.readLine();
+
+        System.out.println("What you wanna do?\n");
         System.out.println("1-Upload content\n");
         System.out.println("2-Search content\n");
         System.out.println("3-Download content\n");
-        System.out.println("4-Delete content\n");
+        System.out.println("4-Delete or modify content\n");
 
         String s = null;
-
-        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
         s = bufferRead.readLine();
+
+
 
         ArrayList<String> theContent;
         MediaClient cl = new MediaClient();
@@ -57,7 +63,7 @@ public class Menu {
             String topic = bufferRead.readLine();
 
             byte[] fileContent = Files.readAllBytes(file.toPath());
-            cl.upload(fileContent, title, topic);
+            cl.upload(fileContent, title, topic, name);
             System.exit(0);
         }
 
@@ -66,10 +72,12 @@ public class Menu {
             System.out.println("Search content\n");
 
 
-            String type = "Topics";
+
             System.out.println("What's the topic?\n");
             String param = bufferRead.readLine();
-            theContent = cl.searchContent(param, type);
+            theContent = cl.searchContent(param);
+
+            if(theContent.isEmpty()){ System.out.println("There are no titles with this topic\n"); System.exit(0); }
 
             System.out.print(theContent);
 
@@ -77,14 +85,36 @@ public class Menu {
 
         else if( s.equals("3"))
         {
-            System.out.println("Download content");
-            //TODO
+            System.out.println("Download content, the downloads will be stored in your desktop\n");
+            System.out.println(("What content would you like to download? (Write the title)\n"));
+            String selectedTitle = bufferRead.readLine();
+            cl.download(selectedTitle);
+
         }
         else if ( s.equals("4"))
         {
-            System.out.println("Delete content");
-            //TODO
-        }
+            System.out.println("a) Delete content\n");
+            System.out.println("b) Modify content\n");
+            s = bufferRead.readLine();
+
+            if(s.equals("a"))
+            {
+                System.out.println("What title you want to delete?\n");
+                String deleteTitle = bufferRead.readLine();
+                cl.delete(deleteTitle, name);
+                System.out.println(deleteTitle + " deleted");
+            }
+            else if(s.equals("b"))
+            {
+                System.out.println("What title you want to modify?\n");
+                String modifyTitle = bufferRead.readLine();
+                System.out.println("Write the new title\n");
+                String newTitle = bufferRead.readLine();
+                cl.modify(modifyTitle, newTitle, name);
+                System.out.println(modifyTitle + "  modified, the new title is " + newTitle);
+
+            }
+            }
 
 
 
