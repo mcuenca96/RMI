@@ -1,6 +1,7 @@
 import java.rmi.*;
 import java.rmi.server.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
@@ -15,6 +16,9 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
     public void upload(byte[] fileContent, String title, String topic, String client) {
 
 
+        Random rand = new Random();
+        int n = rand.nextInt(99) + 1;
+        identifier = fileContent.hashCode() + n;
         Content myContent = new Content(fileContent, title, topic, identifier,client);
         MyStorage store = new MyStorage(myContent);
 
@@ -40,16 +44,12 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
 
     }
 
-    public void delete(String deleteTitle, String client)
-    {
+    public boolean delete(String deleteTitle, String client) {
         MyStorage delete = new MyStorage(deleteTitle, client);
-        delete.deleteContent();
+        return delete.deleteContent();
     }
 
-    public void modify(String original, String newTitle, String client)
-    {
 
-    }
 
 }
 

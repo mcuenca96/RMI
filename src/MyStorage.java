@@ -22,7 +22,6 @@ public class MyStorage {
     private String topicPath = "/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORAGE/Topics/";
     private String titlesPath = "/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORAGE/Titles/";
     private String filesPath = "/home/marc/Documentos/ComputacioDistribuida/RMI/RMI_STORAGE/Files/";
-    
 
 
     public MyStorage(Content someContent) {
@@ -37,6 +36,7 @@ public class MyStorage {
     public MyStorage(String param) {
         this.param = param;
     }
+
     public MyStorage(String original, String client) {
         this.title = original;
         this.client = client;
@@ -118,7 +118,7 @@ public class MyStorage {
         return null;
     }
 
-    public ArrayList<String> searchTitle(ArrayList<String> identifiers) throws IOException{
+    public ArrayList<String> searchTitle(ArrayList<String> identifiers) throws IOException {
 
         Scanner txtscan2 = new Scanner(new File(titlesPath));
         ArrayList<String> titles = new ArrayList<String>();
@@ -126,7 +126,7 @@ public class MyStorage {
         while (txtscan2.hasNextLine()) {
             String str = txtscan2.nextLine();
 
-            for( int i = 0; i < identifiers.size(); i++) {
+            for (int i = 0; i < identifiers.size(); i++) {
 
                 if (str.indexOf(identifiers.get(i)) != -1) {
 
@@ -137,11 +137,10 @@ public class MyStorage {
                 }
             }
         }
-            return titles;
+        return titles;
     }
 
-    public byte[] download()
-    {
+    public byte[] download() {
         try {
 
             Scanner txtscan = new Scanner(new File(titlesPath));
@@ -152,7 +151,7 @@ public class MyStorage {
                 if (str.indexOf(param) != -1) {
 
                     point = str.indexOf(":");
-                    identifiers.add(str.substring(0,point));
+                    identifiers.add(str.substring(0, point));
 
                 }
             }
@@ -168,7 +167,6 @@ public class MyStorage {
             return Files.readAllBytes(matchingFiles[0].toPath());
 
 
-
         } catch (IOException e) {
 
             e.printStackTrace();
@@ -177,30 +175,96 @@ public class MyStorage {
         return null;
     }
 
-    public void deleteContent()
-    {
+    public boolean deleteContent() {
+
+        ArrayList<String> identifiers = new ArrayList<String>();
+        boolean found = false;
+
 
         try {
 
-            Scanner txtscan2 = new Scanner(new File(titlesPath));
-            ArrayList<String> id = new ArrayList<String>();
+            File inputFile = new File(titlesPath);
+            File tempFile = new File("myTempFile.txt");
 
-            while (txtscan2.hasNextLine()) {
-                String str = txtscan2.nextLine();
-                if (str.indexOf(title) != -1 && str.indexOf(client) != -1) {
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
 
-                    point = str.indexOf(":");
-                    System.out.println(str.substring(0, point));
-                    id.add(str.substring(0, point));
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(titlesPath));
-                    writer.write(str + System.getProperty("line.separator"));
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                if (currentLine.indexOf(title) != -1 && currentLine.indexOf(client) != -1){
+
+                    point = currentLine.indexOf(":");
+                    identifiers.add(currentLine.substring(0,point));
+                    found = true;
+                    continue;
+                }
+                    writer.write(currentLine + System.getProperty("line.separator"));
+
+            }
+            writer.close();
+            reader.close();
+            boolean successful = tempFile.renameTo(inputFile);
+
+            if (identifiers.size() >= 1){
+                deleteTopics(identifiers);
+                deleteFiles(identifiers);
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return found;
+
+    }
+
+    public void deleteTopics(ArrayList<String> identifiers){
+
+        try {
+
+            File inputFile = new File(topicPath);
+            File tempFile = new File("myTempFile.txt");
+
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+
+            String currentLine;
+
+            while ((currentLine = reader.readLine()) != null) {
+                for (int i = 0; i < identifiers.size(); i++) {
+
+                    if (currentLine.indexOf(identifiers.get(i)) != - 1) continue;
+                    writer.write(currentLine + System.getProperty("line.separator"));
+
+                }
+            }
+            writer.close();
+            reader.close();
+            boolean successful = tempFile.renameTo(inputFile);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteFiles(ArrayList<String> identifiers){
+
+        File index = new File(filesPath);
+        String[]entries = index.list();
+        for(String s: entries){
+            File currentFile = new File(index.getPath(),s);
+            for (int i = 0; i < identifiers.size(); i++){
+
+                if (currentFile.getName().equals(identifiers.get(i))){
+
+                    System.out.println(currentFile.getName());
+                    currentFile.delete();
                 }
 
             }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
+
         }
 
 

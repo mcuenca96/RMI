@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.io.PrintWriter;
+import java.util.Random;
 
 public class MediaServer {
     public static void main(String args[]) {
@@ -12,7 +13,8 @@ public class MediaServer {
         int RMIPortNum = 7777;
         int portNum = 7777;
 
-        int mediaKey;
+        //Random rand = new Random();
+        //int n = rand.nextInt(99) + 1;
 
 
         try {
@@ -25,11 +27,6 @@ public class MediaServer {
             // register the object under the name “some”
             String registryURL = "rmi://localhost:" + portNum + "/some";
             Naming.rebind(registryURL, exportedObj);
-
-            mediaKey = exportedObj.hashCode();
-
-            exportedObj.identifier = mediaKey;
-
 
 
         }// end try
@@ -51,7 +48,7 @@ public class MediaServer {
             // if the registry does not already exist
         } catch (RemoteException ex) {
             // No valid registry at that port.
-            System.out.println("RMI registry cannot be located at port " + RMIPortNum);
+            //System.out.println("RMI registry cannot be located at port " + RMIPortNum);
             Registry registry = LocateRegistry.createRegistry(RMIPortNum);
             System.out.println("RMI registry created at port " + RMIPortNum);
         }

@@ -19,7 +19,7 @@ public class Menu {
         String name = null;
         name = bufferRead.readLine();
 
-        System.out.println("What you wanna do?\n");
+        System.out.println("What you want to do?\n");
         System.out.println("1-Upload content\n");
         System.out.println("2-Search content\n");
         System.out.println("3-Download content\n");
@@ -55,7 +55,10 @@ public class Menu {
             File file = chooser.getSelectedFile();
 
 
-            if (file == null) System.exit(0);
+            if (file == null) {
+                System.out.println("EXIT\n");
+                System.exit(0);
+            }
 
 
             String title = chooser.getSelectedFile().getName();
@@ -64,6 +67,7 @@ public class Menu {
 
             byte[] fileContent = Files.readAllBytes(file.toPath());
             cl.upload(fileContent, title, topic, name);
+            System.out.println("Content stored correctly\n");
             System.exit(0);
         }
 
@@ -85,36 +89,26 @@ public class Menu {
 
         else if( s.equals("3"))
         {
-            System.out.println("Download content, the downloads will be stored in your desktop\n");
+            System.out.println("Download content, where you want to download it?\n");
+            JFileChooser f = new JFileChooser();
+            f.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            f.showSaveDialog(null);
+            String downloadPath = f.getSelectedFile() + "/";
             System.out.println(("What content would you like to download? (Write the title)\n"));
             String selectedTitle = bufferRead.readLine();
-            cl.download(selectedTitle);
+            cl.download(selectedTitle, downloadPath);
+            System.out.println("Downloaded!");
 
         }
-        else if ( s.equals("4"))
-        {
-            System.out.println("a) Delete content\n");
-            System.out.println("b) Modify content\n");
-            s = bufferRead.readLine();
+        else if ( s.equals("4")) {
+            System.out.println("What title you want to delete?\n");
+            String deleteTitle = bufferRead.readLine();
+            cl.delete(deleteTitle, name);
 
-            if(s.equals("a"))
-            {
-                System.out.println("What title you want to delete?\n");
-                String deleteTitle = bufferRead.readLine();
-                cl.delete(deleteTitle, name);
-                System.out.println(deleteTitle + " deleted");
-            }
-            else if(s.equals("b"))
-            {
-                System.out.println("What title you want to modify?\n");
-                String modifyTitle = bufferRead.readLine();
-                System.out.println("Write the new title\n");
-                String newTitle = bufferRead.readLine();
-                cl.modify(modifyTitle, newTitle, name);
-                System.out.println(modifyTitle + "  modified, the new title is " + newTitle);
 
-            }
-            }
+        } else {
+            System.out.println("Not a valid option");
+        }
 
 
 

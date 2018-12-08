@@ -50,13 +50,13 @@ public class MediaClient {
 
     }
 
-    public void download(String selectedTitle) throws RemoteException{
+    public void download(String selectedTitle, String downloadPath) throws RemoteException{
 
         rmiConnection();
         byte[] downloaded = ourMedia.download(selectedTitle);
 
         // Type the path to your Desktop
-        try (FileOutputStream fos = new FileOutputStream("/home/marc/Escritorio/" + selectedTitle)) {
+        try (FileOutputStream fos = new FileOutputStream(downloadPath + selectedTitle)) {
             fos.write(downloaded);
 
 
@@ -70,14 +70,15 @@ public class MediaClient {
     public void delete(String deleteTitle, String client) throws RemoteException
     {
         rmiConnection();
-        ourMedia.delete(deleteTitle, client);
+        if (!ourMedia.delete(deleteTitle, client))
+        {
+            System.out.println("ERROR: There is no title with that name or you are not the one who uploaded it\n");
+        }
+        else {
+            System.out.println(deleteTitle + " deleted");
+        }
     }
 
-    public void modify(String original, String newTitle, String client) throws RemoteException
-    {
-        rmiConnection();
-        ourMedia.modify(original, newTitle, client);
-    }
 
 }
 
