@@ -96,6 +96,10 @@ public class Menu {
             String downloadPath = f.getSelectedFile() + "/";
             System.out.println(("What content would you like to download? (Write the title)\n"));
             String selectedTitle = bufferRead.readLine();
+            if (cl.showTitles(selectedTitle)){
+                System.out.println("There are more than one title with this name. Write the title exactly\n");
+                selectedTitle = bufferRead.readLine();
+            }
             cl.download(selectedTitle, downloadPath);
             System.out.println("Downloaded!");
 
@@ -103,6 +107,10 @@ public class Menu {
         else if ( s.equals("4")) {
             System.out.println("What title you want to delete?\n");
             String deleteTitle = bufferRead.readLine();
+            if (cl.showTitles(deleteTitle)){
+                System.out.println("There are more than one title with this name. Write the title exactly\n");
+                deleteTitle = bufferRead.readLine();
+            }
             cl.delete(deleteTitle, name);
 
 

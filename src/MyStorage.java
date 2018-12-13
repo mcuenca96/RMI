@@ -1,4 +1,6 @@
 
+import com.sun.org.apache.xml.internal.security.keys.storage.StorageResolver;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class MyStorage {
 
 
     public void saveContent() {
+
 
         try (FileOutputStream fos = new FileOutputStream(filesPath + id)) {
             fos.write(file);
@@ -144,17 +147,19 @@ public class MyStorage {
 
             Scanner txtscan = new Scanner(new File(titlesPath));
             ArrayList<String> identifiers = new ArrayList<String>();
+            ArrayList<String> titles = new ArrayList<>();
 
             while (txtscan.hasNextLine()) {
                 String str = txtscan.nextLine();
                 if (str.indexOf(param) != -1) {
 
                     point = str.indexOf(":");
+                    point2 = str.indexOf(" ");
                     identifiers.add(str.substring(0, point));
+                    titles.add(str.substring(point + 1, point2));
 
                 }
             }
-
 
             File f = new File(filesPath);
             File[] matchingFiles = f.listFiles(new FilenameFilter() {
@@ -266,7 +271,35 @@ public class MyStorage {
 
         }
 
+    }
 
+    public ArrayList<String> showTitles(){
+
+        ArrayList<String> identifiers = new ArrayList<String>();
+        ArrayList<String> titles = new ArrayList<>();
+
+        try {
+
+            Scanner txtscan = new Scanner(new File(titlesPath));
+
+            while (txtscan.hasNextLine()) {
+                String str = txtscan.nextLine();
+                if (str.indexOf(param) != -1) {
+
+                    point = str.indexOf(":");
+                    point2 = str.indexOf(" ");
+                    identifiers.add(str.substring(0, point));
+                    titles.add(str.substring(point + 1, point2));
+
+                }
+            }
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+
+        return titles;
     }
 }
 

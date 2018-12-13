@@ -22,8 +22,8 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
         Content myContent = new Content(fileContent, title, topic, identifier,client);
         MyStorage store = new MyStorage(myContent);
 
-        store.saveContent();
         store.saveTitle();
+        store.saveContent();
         store.saveTopics();
     }
 
@@ -42,6 +42,12 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
         MyStorage download = new MyStorage(selectedTitle);
         return download.download();
 
+    }
+
+    public ArrayList<String> showTitles(String selectedTitle){
+
+        MyStorage search = new MyStorage(selectedTitle);
+        return search.showTitles();
     }
 
     public boolean delete(String deleteTitle, String client) {

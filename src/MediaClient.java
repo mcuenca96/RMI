@@ -67,6 +67,24 @@ public class MediaClient {
 
     }
 
+    public boolean showTitles(String selectedTitle) throws RemoteException{
+
+        rmiConnection();
+        ArrayList<String> titles = ourMedia.showTitles(selectedTitle);
+
+        if (titles.size() > 1) {
+
+            for (int i = 0; i < titles.size(); i++) {
+
+                System.out.println(titles.get(i));
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public void delete(String deleteTitle, String client) throws RemoteException
     {
         rmiConnection();
