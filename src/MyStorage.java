@@ -33,6 +33,7 @@ public class MyStorage {
         this.client = someContent.getClient();
 
     }
+    public MyStorage(){}
 
     public MyStorage(String param) {
         this.param = param;
@@ -64,7 +65,7 @@ public class MyStorage {
         try {
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(titlesPath, true));
-            writer.write(this.id + ":" + this.title + "  uploaded by  " + this.client);
+            writer.write(this.id + ":" + this.title + " - uploaded by  " + this.client);
             writer.newLine();
 
             writer.close();
@@ -133,7 +134,7 @@ public class MyStorage {
                 if (str.indexOf(identifiers.get(i)) != -1) {
 
                     point = str.indexOf(":");
-                    point2 = str.indexOf(" ");
+                    point2 = str.indexOf("-");
 
                     titles.add(str.substring(point + 1, point2));
                 }
@@ -154,7 +155,7 @@ public class MyStorage {
                 if (str.indexOf(param) != -1) {
 
                     point = str.indexOf(":");
-                    point2 = str.indexOf(" ");
+                    point2 = str.indexOf("-");
                     identifiers.add(str.substring(0, point));
                     titles.add(str.substring(point + 1, point2));
 
@@ -273,6 +274,29 @@ public class MyStorage {
 
     }
 
+    public ArrayList<String> allTitles(){
+        ArrayList<String> titles = new ArrayList<>();
+        System.out.println("HELO");
+        try {
+
+            Scanner txtscan = new Scanner(new File(titlesPath));
+
+            while (txtscan.hasNextLine()) {
+                String str = txtscan.nextLine();
+
+                    point = str.indexOf(":");
+                    point2 = str.indexOf("-");
+                    titles.add(str.substring(point + 1, point2));
+            }
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        System.out.println(titles);
+        return titles;
+    }
+
     public ArrayList<String> showTitles(){
 
         ArrayList<String> identifiers = new ArrayList<String>();
@@ -287,7 +311,7 @@ public class MyStorage {
                 if (str.indexOf(param) != -1) {
 
                     point = str.indexOf(":");
-                    point2 = str.indexOf(" ");
+                    point2 = str.indexOf("-");
                     identifiers.add(str.substring(0, point));
                     titles.add(str.substring(point + 1, point2));
 

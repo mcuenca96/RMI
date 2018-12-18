@@ -27,6 +27,11 @@ public class MediaImpl extends UnicastRemoteObject implements MediaInterface {
         store.saveTopics();
     }
 
+    public ArrayList<String> allTitles(){
+        MyStorage titles = new MyStorage();
+        return titles.allTitles();
+    }
+
 
    public ArrayList<String> getContent(String param) {
 

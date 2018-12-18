@@ -67,6 +67,21 @@ public class MediaClient {
 
     }
 
+    public ArrayList<String> getTitles(String selectedTitle) throws RemoteException{
+        rmiConnection();
+        if (ourMedia.showTitles(selectedTitle).size() <= 0){
+            System.out.println("No titles found\n");
+            System.exit(0);
+        }
+        return ourMedia.showTitles(selectedTitle);
+    }
+
+    public ArrayList<String> allTitles() throws RemoteException{
+
+        rmiConnection();
+        return ourMedia.allTitles();
+    }
+
     public boolean showTitles(String selectedTitle) throws RemoteException{
 
         rmiConnection();

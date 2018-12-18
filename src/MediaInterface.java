@@ -9,6 +9,7 @@ public interface MediaInterface extends Remote {
     byte[] download(String title) throws RemoteException;
     ArrayList<String> showTitles(String selectedTitle) throws RemoteException;
     ArrayList<String> getContent(String param) throws RemoteException;
+    ArrayList<String> allTitles() throws RemoteException;
     boolean delete(String title, String client) throws RemoteException;
 
 
